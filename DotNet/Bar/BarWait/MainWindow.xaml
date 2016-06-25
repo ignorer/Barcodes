@@ -1,0 +1,132 @@
+﻿<Window
+    x:Class="BarWait.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="BarWait"
+    Top="200"
+    Left="200"
+    Height="250"
+    Width="400"
+    Background="DarkGray"
+    Closing="MainWindowOnClosing"
+    KeyDown="MainWindowOnKeyDown"
+    ResizeMode="NoResize"
+    Icon="icon.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu
+            Grid.Row="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Run"/>
+                <Separator/>
+                <MenuItem Header="Exit" Click="Exit"/>
+            </MenuItem>
+            <MenuItem Header="Help" Click="ShowHelp"/>
+        </Menu>
+        <Grid
+            Grid.Row="1"
+            Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Root path:" VerticalAlignment="Center"/>
+                <TextBox
+                    Grid.Row="0" Grid.Column="2"
+                    Name="PathBox"
+                    MouseDoubleClick="RootPathTextBoxDoubleClick"/>
+            </Grid>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Tile size:" VerticalAlignment="Center"/>
+                        <ComboBox Name="TileSizeBox" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40">
+                            <ComboBoxItem Content="48"/>
+                            <ComboBoxItem Content="64"/>
+                        </ComboBox>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Dataset mode:" VerticalAlignment="Center"/>
+                        <ComboBox Name="DatasetModeBox" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60">
+                            <ComboBoxItem Content="Train"/>
+                            <ComboBoxItem Content="Test"/>
+                        </ComboBox>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="First stage:" VerticalAlignment="Center"/>
+                        <CheckBox Grid.Column="2" Name="FirstStageFlag" VerticalAlignment="Center"/>
+                    </Grid>
+                    <Grid Grid.Column="1" HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Second stage:" VerticalAlignment="Center"/>
+                        <CheckBox Grid.Column="2" Name="SecondStageFlag" VerticalAlignment="Center"/>
+                    </Grid>
+                    <Grid Grid.Column="2" HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Third stage:" VerticalAlignment="Center"/>
+                        <CheckBox Grid.Column="2" Name="ThirdStageFlag" VerticalAlignment="Center"/>
+                    </Grid>
+                </Grid>
+                
+            </Grid>
+            <Button Grid.Row="4" Content="Run" Click="Process"/>
+        </Grid>
+    </Grid>
+</Window>
