@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BarUtils {
   public static class Features {
-    public static double[] StandardDeviationFeatures(double[][] image) {
+    public static double[] StandardDeviationFeatures(byte[][] image) {
       const int verticalPartCount = 2;
       const int horizontalPartCount = 2;
 
@@ -41,84 +41,29 @@ namespace BarUtils {
       return features.ToArray();
     }
 
-    public static double[] LocalBinaryPatternFeatures(double[][] image) {
+    public static double[] LocalBinaryPatternFeatures(byte[][] image) {
+      Utility.StartClock();
       var height = image.Length;
       var width = image[0].Length;
-//      var features = new List<double>();
-//      var histogram = new List<double>();
-//      for (int i = 0; i < 256; ++i) {
-//        histogram.Add(0);
-//      }
       var histogram = new double[256];
       for (int i = 1; i < height - 1; ++i) {
+        var prev = image[i - 1];
+        var current = image[i];
+        var next = image[i + 1];
         for (int j = 1; j < width - 1; ++j) {
-          var index = (image[i - 1][j - 1] <= image[i][j] ? 0 : 1) * 128 +
-                      (image[i - 1][j * 1] <= image[i][j] ? 0 : 1) * 64 +
-                      (image[i - 1][j + 1] <= image[i][j] ? 0 : 1) * 32 +
-                      (image[i * 1][j - 1] <= image[i][j] ? 0 : 1) * 16 +
-                      (image[i * 1][j + 1] <= image[i][j] ? 0 : 1) * 8 +
-                      (image[i + 1][j - 1] <= image[i][j] ? 0 : 1) * 4 +
-                      (image[i + 1][j * 1] <= image[i][j] ? 0 : 1) * 2 + (image[i + 1][j + 1] <= image[i][j] ? 0 : 1);
+          var value = current[j];
+          var index = (prev[j - 1] <= value ? 0 : 128) + (prev[j] <= value ? 0 : 64) +
+                      (prev[j + 1] <= value ? 0 : 32) + (current[j - 1] <= value ? 0 : 16) +
+                      (current[j + 1] <= value ? 0 : 8) + (next[j - 1] <= value ? 0 : 4) +
+                      (next[j] <= value ? 0 : 2) + (next[j + 1] <= value ? 0 : 1);
           histogram[index] += 1;
         }
       }
+      Utility.StopClock();
       return histogram;
-
-//      double average = 0;
-//      double squareAverage = 0;
-//      foreach (double value in histogram) {
-//        average += value;
-//        squareAverage += value * value;
-//      }
-//      average = (average - (histogram[0] + histogram.Last())) / (histogram.Count - 2);
-//      squareAverage = Math.Sqrt((squareAverage - histogram[0] + histogram.Last()) / (histogram.Count - 2));
-//
-//      double deviation = 0;
-//      double standardDeviation = 0;
-//      int moreThanAverageCount = 0;
-//      int moreThan50Count = 0;
-//      int moreThan90Count = 0;
-//      int moreThan120Count = 0;
-//      int moreThan150Count = 0;
-//      for (var i = 0; i < histogram.Count; i++) {
-//        if (i == 0 || i == histogram.Count - 1) {
-//          continue;
-//        }
-//        var value = histogram[i];
-//        if (value > 50) {
-//          ++moreThan50Count;
-//        }
-//        if (value > 90) {
-//          ++moreThan90Count;
-//        }
-//        if (value > 120) {
-//          ++moreThan120Count;
-//        }
-//        if (value > 150) {
-//          ++moreThan150Count;
-//        }
-//        if (value > average) {
-//          ++moreThanAverageCount;
-//        }
-//        deviation += Math.Abs(value - average);
-//        standardDeviation += Math.Pow(value - average, 2);
-//      }
-//      standardDeviation = Math.Sqrt(standardDeviation);
-//
-//      features.Add(average);
-//      features.Add(squareAverage);
-//      features.Add(deviation);
-//      features.Add(standardDeviation);
-//      features.Add(moreThan50Count);
-//      features.Add(moreThan90Count);
-//      features.Add(moreThan120Count);
-//      features.Add(moreThan150Count);
-//      features.Add(moreThanAverageCount);
-//      features.AddRange(histogram);
-//      return features.ToArray();
     }
 
-    public static double[] StructureTensorFeatures(double[][] image) {
+    public static double[] StructureTensorFeatures(byte[][] image) {
       const int verticalPartCount = 2;
       const int horizontalPartCount = 2;
 
@@ -158,7 +103,7 @@ namespace BarUtils {
 
     public static double[] GetFeatures(this Bitmap bitmap) {
       var height = bitmap.Height;
-      var width = bitmap.Width;        
+      var width = bitmap.Width;
       var tileData = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly,
             PixelFormat.Format24bppRgb);
       var stride = tileData.Stride;
@@ -166,12 +111,12 @@ namespace BarUtils {
       Marshal.Copy(tileData.Scan0, tileBytes, 0, tileBytes.Length);
       bitmap.UnlockBits(tileData);
 
-      var image = new double[height][];
+      var image = new byte[height][];
         for (int y = 0; y < height; ++y) {
-          image[y] = new double[width];
+          image[y] = new byte[width];
           for (int x = 0; x < width; ++x) {
             var index = y * stride + x * 3;
-            image[y][x] = 0.3 * tileBytes[index + 2] + 0.59 * tileBytes[index + 1] + 0.11 * tileBytes[index];
+            image[y][x] = (byte) (0.3 * tileBytes[index + 2] + 0.59 * tileBytes[index + 1] + 0.11 * tileBytes[index]);
           }
         }
       var result = new List<double>();

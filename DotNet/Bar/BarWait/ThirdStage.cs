@@ -33,12 +33,12 @@ namespace BarWait {
         tile.UnlockBits(tileData);
         tile.Dispose();
 
-        var image = new double[height][];
+        var image = new byte[height][];
         for (int y = 0; y < height; ++y) {
-          image[y] = new double[width];
+          image[y] = new byte[width];
           for (int x = 0; x < width; ++x) {
             var index = y * stride + x * 3;
-            image[y][x] = 0.3 * tileBytes[index + 2] + 0.59 * tileBytes[index + 1] + 0.11 * tileBytes[index];
+            image[y][x] = (byte) (0.3 * tileBytes[index + 2] + 0.59 * tileBytes[index + 1] + 0.11 * tileBytes[index]);
           }
         }
 

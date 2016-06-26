@@ -65,21 +65,21 @@ namespace BarGod {
       Marshal.Copy(data.Scan0, bitmapBytes, 0, bitmapBytes.Length);
       bitmap.UnlockBits(data);
 
-      var image = new double[height * width * 3];
+      var image = new byte[height * width * 3];
       for (int i = 0; i < height; ++i) {
         for (int j = 0; j < width; j++) {
           var index = i * data.Stride + j * 3;
-          image[i * width + j] = 0.3 * bitmapBytes[index + 2] + 0.59 * bitmapBytes[index + 1] +
-                                 0.11 * bitmapBytes[index];
+          image[i * width + j] = (byte) (0.3 * bitmapBytes[index + 2] + 0.59 * bitmapBytes[index + 1] +
+                                         0.11 * bitmapBytes[index]);
         }
       }
 
       int size2 = (int) (size * (1 - 0.5));
       int n = (height - size) / size2 + 1;
       int m = (width - size) / size2 + 1;
-      var tile = new double[size][];
+      var tile = new byte[size][];
       for (int i = 0; i < size; ++i) {
-        tile[i] = new double[size];
+        tile[i] = new byte[size];
       }
       for (int i = 0; i < n; ++i) {
         for (int j = 0; j < m; ++j) {
